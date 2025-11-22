@@ -7,17 +7,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS STYLING: SKY THEME 2.0 --- */
+        /* --- CSS STYLING: SKY THEME 3.0 - PARALLAX & FANTASY --- */
         :root {
-            --bg-gradient-1: #87CEEB; 
-            --bg-gradient-2: #E0F7FA; 
-            --card-bg: rgba(255, 255, 255, 0.95);
+            /* Palette màu mới huyền ảo hơn */
+            --bg-gradient-start: #0f2027; /* Xanh đen đậm */
+            --bg-gradient-end: #2c5364;   /* Xanh lam tối */
+            --card-bg: rgba(255, 255, 255, 0.9);
             --text-color: #2c3e50;
-            --primary-color: #00a8ff; /* Xanh chủ đạo */
-            --primary-dark: #0984e3;
-            --accent-yellow: #fbc531; /* Vàng nổi bật */
-            --accent-pink: #ff7675;
-            --nav-bg: rgba(255, 255, 255, 0.85); /* Màu nền Header kính mờ */
+            --primary-color: #00cec9;    /* Màu xanh ngọc sáng */
+            --primary-dark: #00b894;
+            --accent-yellow: #ffeaa7;    /* Vàng kem */
+            --accent-pink: #fab1a0;      /* Hồng đào */
+            --nav-bg: rgba(15, 32, 39, 0.85); /* Navbar tối màu kính mờ */
             --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -29,69 +30,115 @@
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
-            position: relative;
-            background-color: #87CEEB;
+            /* Bỏ màu nền cũ */
+            background-color: transparent; 
         }
 
-        /* --- BACKGROUND --- */
-        .bg-animation {
+        /* --- NEW PARALLAX BACKGROUND SYSTEM --- */
+        .parallax-container {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: linear-gradient(180deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -10;
+            overflow: hidden;
+            background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
         }
-        .cloud {
-            position: absolute; background: #fff; border-radius: 50px; opacity: 0.9;
-            animation: floatClouds linear infinite; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-        .cloud::after, .cloud::before { content: ''; position: absolute; background: inherit; border-radius: 50%; }
-        .cloud:nth-child(1) { width: 100px; height: 40px; top: 15%; left: -120px; animation-duration: 25s; }
-        .cloud:nth-child(1)::after { width: 30px; height: 30px; top: -15px; left: 15px; }
-        .cloud:nth-child(1)::before { width: 40px; height: 40px; top: -20px; left: 40px; }
-        .cloud:nth-child(2) { width: 160px; height: 60px; top: 35%; left: -200px; animation-duration: 40s; animation-delay: 2s; opacity: 0.7; }
-        .cloud:nth-child(2)::after { width: 50px; height: 50px; top: -25px; left: 25px; }
-        .cloud:nth-child(2)::before { width: 70px; height: 70px; top: -35px; left: 60px; }
-        .cloud:nth-child(3) { width: 120px; height: 50px; top: 65%; left: -150px; animation-duration: 30s; animation-delay: 5s; }
-        .cloud:nth-child(3)::after { width: 40px; height: 40px; top: -18px; left: 20px; }
-        .cloud:nth-child(3)::before { width: 50px; height: 50px; top: -25px; left: 50px; }
-        @keyframes floatClouds { 0% { transform: translateX(-200px); } 100% { transform: translateX(110vw); } }
 
-        /* --- NEW HEADER (NAVBAR) --- */
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 110%; /* Rộng hơn màn hình để di chuyển */
+            height: 110%; /* Cao hơn màn hình */
+            background-size: cover;
+            background-position: center;
+            /* Hiệu ứng chuyển động mượt mà */
+            transition: transform 0.1s ease-out; 
+            /* Để tâm ở giữa để khi scale không bị lệch */
+            transform-origin: center center;
+            left: -5%; top: -5%;
+        }
+
+        /* --- CÁC LỚP HÌNH NỀN (Bạn thay link ảnh thật vào đây) --- */
+        /* Lớp 1: Bầu trời sao nền (Xa nhất, di chuyển chậm nhất) */
+        .layer-bg {
+            z-index: 1;
+            /* Ví dụ placeholder: Màu tối + chấm sao */
+            background-color: transparent;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0.8;
+        }
+        
+        /* Lớp 2: Mây phía xa (Di chuyển chậm) */
+        .layer-clouds-back {
+            z-index: 2;
+            /* Sử dụng ảnh PNG mây trong suốt */
+            /* background-image: url('GameImage/clouds-back.png'); */
+            background-image: url('https://www.transparentpng.com/thumb/clouds/white-fluffy-clouds-png-images-free-download-22.png'); /* Ảnh ví dụ online */
+            background-size: cover;
+            opacity: 0.5;
+            filter: brightness(0.8);
+        }
+
+        /* Lớp 3: Các vật thể bay (Đảo bay, khinh khí cầu...) - Di chuyển trung bình */
+        .layer-objects {
+            z-index: 3;
+            /* background-image: url('GameImage/floating-islands.png'); */
+            background-image: url('https://png.pngtree.com/png-clipart/20220124/original/pngtree-cartoon-floating-island-png-image_7187695.png'); /* Ảnh ví dụ online */
+            background-size: auto 40%;
+            background-repeat: no-repeat;
+            background-position: 80% 30%;
+        }
+
+        /* Lớp 4: Mây gần (Gần nhất, di chuyển nhanh nhất) */
+        .layer-clouds-front {
+            z-index: 4;
+            /* background-image: url('GameImage/clouds-front.png'); */
+            background-image: url('https://www.transparentpng.com/thumb/clouds/real-clouds-png-transparent-background-free-download-19.png'); /* Ảnh ví dụ online */
+            background-size: cover;
+            background-position: center bottom;
+            opacity: 0.9;
+        }
+
+        /* --- UPDATE NAVBAR COLORS --- */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
             background: var(--nav-bg);
-            backdrop-filter: blur(12px); /* Hiệu ứng kính mờ */
-            position: sticky; /* Dính trên cùng khi cuộn */
+            backdrop-filter: blur(12px);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--primary-color);
+            color: var(--primary-color); /* Đổi màu logo */
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-shadow: 0 0 10px rgba(0, 206, 201, 0.5); /* Thêm hiệu ứng phát sáng */
         }
         .logo i { color: var(--accent-yellow); font-size: 1.8rem; }
 
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            font-weight: 600;
-        }
-
         .nav-links a {
             text-decoration: none;
-            color: #555;
+            color: #ccc; /* Màu chữ menu sáng hơn */
             transition: 0.3s;
             position: relative;
         }
@@ -99,108 +146,51 @@
         .nav-links a:hover, .nav-links a.active {
             color: var(--primary-color);
         }
-        
-        /* Gạch chân animation khi hover */
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 3px;
-            bottom: -5px; left: 0; background: var(--accent-yellow);
-            transition: width 0.3s; border-radius: 2px;
-        }
-        .nav-links a:hover::after { width: 100%; }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        /* Các phần tử khác giữ nguyên hoặc điều chỉnh nhẹ màu sắc */
+        .search-box { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+        .search-box input { color: #fff; } .search-box input::placeholder { color: #aaa; }
+        .search-box:focus-within { background: rgba(255,255,255,0.2); border-color: var(--primary-color); }
+        .icon-btn { color: #ccc; } .icon-btn:hover { color: var(--primary-color); }
+        .btn-login { background: var(--primary-color); box-shadow: 0 4px 10px rgba(0, 206, 201, 0.3); }
+        .btn-login:hover { background: var(--primary-dark); }
 
-        /* Search Box */
-        .search-box {
-            position: relative;
-            background: #f1f2f6;
-            border-radius: 30px;
-            padding: 5px 15px;
-            display: flex;
-            align-items: center;
-            border: 2px solid transparent;
-            transition: 0.3s;
-        }
-        .search-box:focus-within {
-            border-color: var(--primary-color);
-            background: #fff;
-        }
-        .search-box input {
-            border: none; background: transparent; outline: none;
-            padding: 5px; width: 150px; color: #333; font-size: 0.9rem;
-        }
-        .search-box i { color: #aaa; }
-
-        /* Icon Actions */
-        .icon-btn {
-            font-size: 1.2rem; color: #555; cursor: pointer; position: relative; transition: 0.3s;
-        }
-        .icon-btn:hover { color: var(--primary-color); transform: scale(1.1); }
-        
-        /* Số lượng trong giỏ hàng */
-        .cart-badge {
-            position: absolute; top: -8px; right: -8px;
-            background: var(--accent-pink); color: white;
-            font-size: 0.7rem; width: 18px; height: 18px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold;
-        }
-
-        /* Nút Đăng nhập */
-        .btn-login {
-            background: var(--primary-color); color: white;
-            border: none; padding: 8px 20px; border-radius: 20px;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 168, 255, 0.3);
-        }
-        .btn-login:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        /* --- HERO SECTION (BANNER) --- */
+        /* --- HERO SECTION --- */
         .hero {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 80px 20px 60px;
         }
         .hero h1 {
-            font-size: 3rem; color: var(--primary-color);
-            text-shadow: 3px 3px 0px #fff; margin-bottom: 10px;
+            font-size: 3.5rem; color: var(--primary-color);
+            text-shadow: 0 0 20px rgba(0, 206, 201, 0.6); /* Hiệu ứng neon phát sáng */
+            margin-bottom: 15px;
         }
-        .hero p { background: #fff; display: inline-block; padding: 5px 20px; border-radius: 20px; color: #666; font-weight: 600; }
+        .hero p { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(5px);
+            display: inline-block; 
+            padding: 8px 25px; 
+            border-radius: 25px; 
+            color: var(--accent-yellow); 
+            font-weight: 600; 
+            border: 1px solid rgba(255,255,255,0.2);
+        }
 
-        /* --- CONTAINER & GRID (Giữ nguyên) --- */
+        /* --- CONTAINER & GRID (Điều chỉnh nhẹ để nổi bật trên nền tối) --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        h2 { border-left: 8px solid var(--accent-yellow); padding-left: 20px; margin: 20px 0 30px; text-transform: uppercase; color: var(--primary-color); font-weight: 800; }
+        h2 { border-left: 8px solid var(--accent-yellow); padding-left: 20px; margin: 20px 0 30px; text-transform: uppercase; color: var(--primary-color); font-weight: 800; text-shadow: 0 0 10px rgba(0, 206, 201, 0.3); }
         
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .game-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; transition: all 0.3s; box-shadow: 0 10px 25px rgba(0, 168, 255, 0.15); position: relative; border: 2px solid transparent; }
-        .game-card:hover { transform: translateY(-10px); border-color: var(--accent-yellow); }
-        .price-tag { position: absolute; top: 15px; right: 15px; background: var(--accent-pink); color: #fff; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; z-index: 2; }
-        .price-tag.free { background: var(--primary-color); }
-        .game-thumb { width: 100%; height: 180px; background-size: cover; background-position: center; }
-        .game-info { padding: 20px; }
-        .game-title { font-size: 1.3rem; color: var(--primary-color); margin-bottom: 5px; font-weight: 700; }
-        .game-desc { font-size: 0.9rem; color: #666; height: 42px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 15px;}
-        
-        .btn-play { width: 100%; padding: 10px; background: var(--accent-yellow); color: #2c3e50; border: none; border-radius: 30px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 3px 0 #e1b12c; }
-        .btn-play:hover { background: #fcd567; transform: translateY(-2px); }
-        .btn-play:active { transform: translateY(2px); box-shadow: none; }
+        .game-card { 
+            background: var(--card-bg); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); /* Bóng đổ đậm hơn */
+        }
+        .btn-play { background: var(--accent-yellow); color: #2d3436; box-shadow: 0 3px 0 #b79f43; }
+        .btn-play:hover { background: #ffeaa7; transform: translateY(-2px); }
 
-        .bank-info-display { background: #f0f9ff; padding: 10px; margin-top: 10px; border-radius: 8px; font-size: 0.85rem; color: #555; border-left: 3px solid var(--primary-color); display: none; }
-        .show-bank { display: block; }
+        .upload-section { background: var(--card-bg); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        label { color: var(--text-color); font-weight: 700; } /* Màu label tối lại vì nền card sáng */
 
-        /* Upload Section */
-        .upload-section { background: #fff; padding: 30px; border-radius: 20px; margin-top: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .form-row { display: flex; gap: 20px; margin-bottom: 15px; }
-        .form-col { flex: 1; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: var(--primary-color); font-weight: 700; }
-        input, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: #f9f9f9; outline: none; }
-        input:focus, textarea:focus { border-color: var(--primary-color); background: #fff; }
-
-        footer { text-align: center; padding: 40px; margin-top: 60px; color: #fff; background: var(--primary-color); font-weight: bold; }
+        footer { text-align: center; padding: 40px; margin-top: 60px; color: #fff; background: rgba(15, 32, 39, 0.9); font-weight: bold; }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
@@ -209,17 +199,20 @@
             .nav-actions { width: 100%; justify-content: space-between; }
             .search-box input { width: 100%; }
             .form-row { flex-direction: column; gap: 0; }
+            .hero h1 { font-size: 2.5rem; }
+            /* Trên mobile, giảm hiệu ứng parallax để tránh lag */
+            .parallax-layer { transition: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-animation">
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
+    <div class="parallax-container" id="parallaxContainer">
+        <div class="parallax-layer layer-bg" data-speed="0.02"></div>
+        <div class="parallax-layer layer-clouds-back" data-speed="0.05"></div>
+        <div class="parallax-layer layer-objects" data-speed="0.08"></div>
+        <div class="parallax-layer layer-clouds-front" data-speed="0.12"></div>
     </div>
-
     <nav class="navbar">
         <div class="logo" onclick="window.location.reload()">
             <i class="fa-solid fa-gamepad"></i> TBN STUDIO
@@ -292,47 +285,46 @@
     </footer>
 
     <script>
-        // --- DỮ LIỆU ---
-        // --- DỮ LIỆU (Đã thay link ảnh online bằng ảnh trong folder) ---
+        // --- SCRIPT HIỆU ỨNG PARALLAX THEO CHUỘT ---
+        document.addEventListener("mousemove", parallax);
+
+        function parallax(e) {
+            // Nếu là mobile thì không chạy hiệu ứng này để đỡ lag
+            if (window.innerWidth < 768) return;
+
+            this.querySelectorAll('.parallax-layer').forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                
+                // Tính toán vị trí di chuyển dựa trên vị trí chuột so với tâm màn hình
+                // Dùng dấu trừ (-) để lớp nền di chuyển ngược hướng chuột -> tạo cảm giác độ sâu
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+
+                // Áp dụng transform. Thêm scale(1.05) để tránh bị lộ viền khi di chuyển mạnh
+                layer.style.transform = `translateX(${x}px) translateY(${y}px) scale(1.05)`;
+            });
+        }
+
+        // --- DỮ LIỆU & LOGIC GAME (GIỮ NGUYÊN NHƯ CŨ) ---
         const initialGames = [
-            { 
-                id: 1, name: "Magician vs Goblin", desc: "Đại chiến phép thuật và quái vật.", price: 0, bankInfo: "", 
-                img: "GameImage/game1.png" // <-- Đường dẫn tới file ảnh
-            },
-            { 
-                id: 2, name: "Sinh viên sinh tồn", desc: "Sống sót qua mùa thi và mì gói.", price: 0, bankInfo: "", 
-                img: "GameImage/game2.png" 
-            },
-            { 
-                id: 3, name: "Anya's Neo Dodger", desc: "Né tránh bài tập trong thế giới Neon.", price: 0, bankInfo: "", 
-                img: "GameImage/game3.png" 
-            },
-            { 
-                id: 4, name: "ERROR RUN", desc: "Chạy trốn màn hình xanh chết chóc.", price: 0, bankInfo: "", 
-                img: "GameImage/game4.png" 
-            },
-            { 
-                id: 5, name: "Naruto Adventure", desc: "Nhiệm vụ Ninja cấp S.", price: 0, bankInfo: "", 
-                img: "GameImage/game5.png" 
-            },
-            { 
-                id: 6, name: "Dạo Phố Chill", desc: "Lái xe thư giãn cùng nhạc Lofi.", price: 0, bankInfo: "", 
-                img: "GameImage/game6.png" 
-            }
+            { id: 1, name: "Magician vs Goblin", desc: "Đại chiến phép thuật và quái vật.", price: 0, bankInfo: "", img: "GameImage/game1.png" },
+            { id: 2, name: "Sinh viên sinh tồn", desc: "Sống sót qua mùa thi và mì gói.", price: 0, bankInfo: "", img: "GameImage/game2.png" },
+            { id: 3, name: "Anya's Neo Dodger", desc: "Né tránh bài tập trong thế giới Neon.", price: 0, bankInfo: "", img: "GameImage/game3.png" },
+            { id: 4, name: "ERROR RUN", desc: "Chạy trốn màn hình xanh chết chóc.", price: 0, bankInfo: "", img: "GameImage/game4.png" },
+            { id: 5, name: "Naruto Adventure", desc: "Nhiệm vụ Ninja cấp S.", price: 0, bankInfo: "", img: "GameImage/game5.png" },
+            { id: 6, name: "Dạo Phố Chill", desc: "Lái xe thư giãn cùng nhạc Lofi.", price: 0, bankInfo: "", img: "GameImage/game6.png" }
         ];
 
         let currentGames = [...initialGames];
         const gameGrid = document.getElementById('gameGrid');
         const uploadForm = document.getElementById('uploadForm');
-        const searchInput = document.getElementById('searchInput'); // Lấy ô tìm kiếm
-
+        const searchInput = document.getElementById('searchInput');
         const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 
-        // --- RENDER FUNCTION ---
         function renderGames(games) {
             gameGrid.innerHTML = "";
             if(games.length === 0) {
-                gameGrid.innerHTML = "<p style='text-align:center; color:#666; grid-column: 1/-1;'>Không tìm thấy game nào...</p>";
+                gameGrid.innerHTML = "<p style='text-align:center; color:#eee; grid-column: 1/-1; font-size: 1.2rem;'>Không tìm thấy game nào...</p>";
                 return;
             }
             games.forEach(game => {
@@ -340,7 +332,6 @@
                 const priceDisplay = isFree ? "FREE" : formatter.format(game.price);
                 const priceClass = isFree ? "free" : "";
                 const bankDisplayClass = (!isFree && game.bankInfo) ? "show-bank" : "";
-
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 card.innerHTML = `
@@ -359,20 +350,16 @@
             });
         }
 
-        // Gọi hàm render ban đầu
         renderGames(currentGames);
 
-        // --- TÍNH NĂNG TÌM KIẾM ---
         searchInput.addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase();
-            // Lọc danh sách game dựa trên tên
             const filteredGames = currentGames.filter(game => 
                 game.name.toLowerCase().includes(keyword)
             );
             renderGames(filteredGames);
         });
 
-        // --- UPLOAD FUNCTION ---
         uploadForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('gName').value;
@@ -392,7 +379,6 @@
                     renderGames(currentGames);
                     uploadForm.reset();
                     alert("Đăng game thành công!");
-                    // Xóa từ khóa tìm kiếm nếu có
                     searchInput.value = "";
                     document.getElementById('gallery-title').scrollIntoView({behavior: "smooth"});
                 }
