@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tràn Bộ Nhớ - Game Fair</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --bg-gradient-1: #87CEEB; 
@@ -63,7 +62,6 @@
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
             border-bottom: 1px solid rgba(255,255,255,0.3);
         }
-
         .logo {
             font-size: 1.5rem;
             font-weight: 900;
@@ -74,6 +72,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
         }
         .logo i { color: var(--accent-yellow); font-size: 1.8rem; }
 
@@ -95,7 +94,6 @@
             transition: width 0.3s; border-radius: 2px;
         }
         .nav-links a:hover::after { width: 100%; }
-
         .nav-actions {
             display: flex;
             align-items: center;
@@ -209,16 +207,20 @@
         <div class="cloud"></div>
     </div>
 
+    <!-- Navbar với logo là <a> mở tab mới, thêm link Đăng tải game -->
     <nav class="navbar">
-        <div class="logo" onclick="window.location.reload()">
+        <a class="logo" href="about.html" target="_blank">
             <i class="fa-solid fa-gamepad"></i> TBN STUDIO
-        </div>
+        </a>
         
         <div class="nav-links">
             <a href="#" class="active">Trang chủ</a>
             <a href="#gallery-title">Khám phá</a>
             <a href="#">Thể loại <i class="fa-solid fa-caret-down" style="font-size: 0.8rem;"></i></a>
             <a href="#">Cộng đồng</a>
+            <a href="#uploadForm" id="uploadNavBtn" style="color:#00a8ff;font-weight:bold;">
+                <i class="fa-solid fa-upload"></i> Đăng tải game
+            </a>
         </div>
 
         <div class="nav-actions">
@@ -226,12 +228,10 @@
                 <input type="text" id="searchInput" placeholder="Tìm game...">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-            
             <div class="icon-btn" onclick="alert('Giỏ hàng của bạn đang trống!')">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="cart-badge">0</span>
             </div>
-
             <button class="btn-login" onclick="alert('Chức năng đăng nhập đang bảo trì!')">Đăng nhập</button>
         </div>
     </nav>
@@ -243,12 +243,11 @@
 
     <div class="container">
         <h2 id="gallery-title">🔥 Game Đề Xuất</h2>
-        <div class="game-grid" id="gameGrid">
-            </div>
+        <div class="game-grid" id="gameGrid"></div>
 
         <h2>🚀 Đăng Bán Game</h2>
-        <div class="upload-section">
-            <form id="uploadForm">
+        <div class="upload-section" id="uploadForm">
+            <form>
                 <div class="form-row">
                     <div class="form-col">
                         <label>Tên Game:</label>
@@ -281,36 +280,24 @@
     </footer>
 
     <script>
+        // JS scroll Đăng tải game khi bấm nav
+        document.getElementById("uploadNavBtn").addEventListener("click", function(e){
+            e.preventDefault();
+            document.getElementById("uploadForm").scrollIntoView({behavior: "smooth"});
+        });
+
         const initialGames = [
-            { 
-                id: 1, name: "Magician vs Goblin", desc: "Đại chiến phép thuật và quái vật.", price: 0, bankInfo: "", 
-                img: "GameImage/game1.png"
-            },
-            { 
-                id: 2, name: "Sinh viên sinh tồn", desc: "Sống sót qua mùa thi và mì gói.", price: 0, bankInfo: "", 
-                img: "GameImage/game2.png" 
-            },
-            { 
-                id: 3, name: "Anya's Neo Dodger", desc: "Né tránh bài tập trong thế giới Neon.", price: 0, bankInfo: "", 
-                img: "GameImage/game3.png" 
-            },
-            { 
-                id: 4, name: "ERROR RUN", desc: "Chạy trốn màn hình xanh chết chóc.", price: 0, bankInfo: "", 
-                img: "GameImage/game4.png" 
-            },
-            { 
-                id: 5, name: "Naruto Adventure", desc: "Nhiệm vụ Ninja cấp S.", price: 0, bankInfo: "", 
-                img: "GameImage/game5.png" 
-            },
-            { 
-                id: 6, name: "Dạo Phố Chill", desc: "Lái xe thư giãn cùng nhạc Lofi.", price: 0, bankInfo: "", 
-                img: "GameImage/game6.png" 
-            }
+            { id: 1, name: "Magician vs Goblin", desc: "Đại chiến phép thuật và quái vật.", price: 0, bankInfo: "", img: "GameImage/game1.png"},
+            { id: 2, name: "Sinh viên sinh tồn", desc: "Sống sót qua mùa thi và mì gói.", price: 0, bankInfo: "", img: "GameImage/game2.png"},
+            { id: 3, name: "Anya's Neo Dodger", desc: "Né tránh bài tập trong thế giới Neon.", price: 0, bankInfo: "", img: "GameImage/game3.png"},
+            { id: 4, name: "ERROR RUN", desc: "Chạy trốn màn hình xanh chết chóc.", price: 0, bankInfo: "", img: "GameImage/game4.png"},
+            { id: 5, name: "Naruto Adventure", desc: "Nhiệm vụ Ninja cấp S.", price: 0, bankInfo: "", img: "GameImage/game5.png"},
+            { id: 6, name: "Dạo Phố Chill", desc: "Lái xe thư giãn cùng nhạc Lofi.", price: 0, bankInfo: "", img: "GameImage/game6.png"}
         ];
 
         let currentGames = [...initialGames];
         const gameGrid = document.getElementById('gameGrid');
-        const uploadForm = document.getElementById('uploadForm');
+        const uploadForm = document.getElementById('uploadForm').querySelector('form');
         const searchInput = document.getElementById('searchInput');
 
         const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
